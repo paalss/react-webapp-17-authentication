@@ -3,6 +3,7 @@
 
 ![app](src/assets/2021-06-18-signup.png)
 
-- sign up / crate new user
-- error alert
-- vise loading state
+- sign up / create new user
+- error alert ved feil passord
+- vise loading state i innloggingsboks
+- change password
