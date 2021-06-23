@@ -65,10 +65,7 @@ const AuthForm = () => {
         // hent expiration time fra response. data.expiresIn er en string
         // som nevner antall sekunder igjen til ID expires.
         // Konverter til nummer, konverter til millisekund, finn ut expiration time
-        const expirationTime = new Date(
-          new Date().getTime() + +data.expiresIn * 1000
-        );
-        authCtx.login(data.idToken, expirationTime.toISOString());
+        authCtx.login(data.idToken, Date.now() + data.expiresIn * 1000);
         history.replace("/");
       })
       .catch((err) => {
