@@ -7,3 +7,6 @@
 - error alert ved feil passord
 - vise loading state i innloggingsboks
 - change password
+- logout
+- navigation guarding
+- persist login status across rerenders

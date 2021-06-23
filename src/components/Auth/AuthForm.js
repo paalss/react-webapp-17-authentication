@@ -5,14 +5,14 @@ import AuthContext from "../../store/auth-context";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
-  const history = useHistory()
+  const history = useHistory();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -45,29 +45,35 @@ const AuthForm = () => {
         "Content-Type": "application/json",
       },
     })
-    .then((res) => {
-      setIsLoading(false);
-      if (res.ok) {
-        return res.json();
-      } else {
-        return res.json().then((data) => {
-          let errorMessage = 'Authentication failed!';
-          if (data && data.error && data.error.message) {
-            errorMessage = data.error.message;
-          }
+      .then((res) => {
+        setIsLoading(false);
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errorMessage = "Authentication failed!";
+            if (data && data.error && data.error.message) {
+              errorMessage = data.error.message;
+            }
 
-          throw new Error(errorMessage);
-        });
-      }
-    })
-    // signup/in succeded
-    .then((data) => {
-      authCtx.login(data.idToken)
-      history.replace('/')
-    })
-    .catch((err) => {
-      alert(err.message);
-    });
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      // signup/in succeded
+      .then((data) => {
+        // hent expiration time fra response. data.expiresIn er en string
+        // som nevner antall sekunder igjen til ID expires.
+        // Konverter til nummer, konverter til millisekund, finn ut expiration time
+        const expirationTime = new Date(
+          new Date().getTime() + +data.expiresIn * 1000
+        );
+        authCtx.login(data.idToken, expirationTime.toISOString());
+        history.replace("/");
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
   };
 
   return (
