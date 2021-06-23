@@ -10,11 +10,13 @@ const AuthContext = createContext({
 });
 
 export const AuthContextProvider = ({ children }) => {
+  // console.debug("AuthContextProvider RUNNING");
   // Hent gyldig token om det finnes
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
 
   const isLoggedIn = !!token;
+  // console.log("logget inn?", isLoggedIn);
 
   const logoutHandler = useCallback(() => {
     setToken(null);
@@ -25,10 +27,14 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   const loginHandler = (token, deadLine) => {
-    // gjør token tilgjengelig etter page reload
+    // console.debug("loginHandler RUNNING");
+    // gjør token og deadline tilgjengelig etter page reload
     localStorage.setItem("token", token);
     localStorage.setItem("deadLine", deadLine);
+    // console.log("localstorage har lagret token og deadline");
+
     logoutTimer = setTimeout(logoutHandler, deadLine - Date.now());
+    // console.log("setToken(token)");
     setToken(token);
   };
 

@@ -62,10 +62,15 @@ const AuthForm = () => {
       })
       // signup/in succeded
       .then((data) => {
+        // console.debug("AutForm.js");
+        // console.log("token:", data.idToken);
         // hent expiration time fra response. data.expiresIn er en string
         // som nevner antall sekunder igjen til ID expires.
-        // Konverter til nummer, konverter til millisekund, finn ut expiration time
-        authCtx.login(data.idToken, Date.now() + data.expiresIn * 1000);
+        // konverter til millisekund, finn ut token deadline
+        const tokenDeadline = Date.now() + data.expiresIn * 1000;
+        // console.log("Funnet token deadline:", tokenDeadline);
+        // console.log("kaller authCtx.login(^^)");
+        authCtx.login(data.idToken, tokenDeadline);
         history.replace("/");
       })
       .catch((err) => {
